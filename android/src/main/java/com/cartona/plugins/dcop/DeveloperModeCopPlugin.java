@@ -6,17 +6,22 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
+
 @CapacitorPlugin(name = "DeveloperModeCop")
 public class DeveloperModeCopPlugin extends Plugin {
 
-    private DeveloperModeCop implementation = new DeveloperModeCop();
+    private DeveloperModeCop developerModeCop;
 
-    @PluginMethod
-    public void echo(PluginCall call) {
-        String value = call.getString("value");
+    @Override
+    public void load() {
+        developerModeCop = new DeveloperModeCop(getContext());
+    }
 
+    @PluginMethod()
+    public void isDeveloperModeEnabled(PluginCall call) {
+        boolean isEnabled = developerModeCop.isDeveloperModeEnabled();
         JSObject ret = new JSObject();
-        ret.put("value", implementation.echo(value));
-        call.resolve(ret);
+        ret.put("isEnabled", isEnabled);
+        call.success(ret);
     }
 }
